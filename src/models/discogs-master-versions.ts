@@ -1,1 +1,7 @@
-export type DiscogsMaster = {};
+export type DiscogsMasterVersions = {
+  versions: [
+    {
+      id: number;
+    },
+  ];
+};
