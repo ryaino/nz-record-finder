@@ -3,13 +3,20 @@ import { DiscogsService } from './services/discogs.service';
 import { firstValueFrom } from 'rxjs';
 import { DiscogsRelease } from './models/discogs-release';
 import { SearchableObject } from './models/searchable-object.model';
-import { RealGroovyService } from './services/real-groovy.service';
+import { RealGroovyService } from 'src/services/real-groovy.service';
+import { RealGroovyHit } from './models/real-groovy-hit.model';
+import { JustForTheRecordHit } from './models/just-for-the-record-hit.model';
+import { JustForTheRecordService } from './services/just-for-the-record.service';
+import { MarbecksService } from './services/marbecks.service';
+import { MarbecksHit } from './models/marbecks-hit.model';
 
 @Injectable()
 export class AppService {
   constructor(
     private discogsService: DiscogsService,
     private realGroovyService: RealGroovyService,
+    private justForTheRecordService: JustForTheRecordService,
+    private marbecksService: MarbecksService,
   ) {}
 
   async scrape(masterId: string) {
@@ -79,6 +86,19 @@ export class AppService {
   }
 
   private async scrapeAllSites(searchableObject: SearchableObject) {
-    return await this.realGroovyService.scrape(searchableObject);
+    const realGroovyHits: RealGroovyHit[] = await this.realGroovyService.scrape(
+      searchableObject,
+    );
+    const justForTheRecordHits: JustForTheRecordHit[] =
+      await this.justForTheRecordService.scrape(searchableObject);
+
+    const marbecksHits: MarbecksHit[] = await this.marbecksService.scrape(
+      searchableObject,
+    );
+    return {
+      realGroovyHits: realGroovyHits,
+      justForTheRecordHits: justForTheRecordHits,
+      marbecksHits: marbecksHits,
+    };
   }
 }

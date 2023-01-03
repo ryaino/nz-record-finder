@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { SearchableObject } from '../models/searchable-object.model';
-import { InjectBrowser } from 'nest-puppeteer';
 import { Browser, Page } from 'puppeteer';
-import { RealGroovyHit } from '../models/real-groovy-hit.model';
+import { InjectBrowser } from 'nest-puppeteer';
+import { SearchableObject } from '../models/searchable-object.model';
+import { MarbecksHit } from '../models/marbecks-hit.model';
 
 @Injectable()
-export class RealGroovyService {
+export class MarbecksService {
   private page!: Page;
 
   constructor(@InjectBrowser() private readonly browser: Browser) {}
@@ -13,7 +13,7 @@ export class RealGroovyService {
   async scrape(searchableObject: SearchableObject) {
     const result = new Map();
     this.page = await this.browser.newPage();
-    await this.page.goto('https://realgroovy.co.nz/');
+    await this.page.goto('https://www.marbecks.co.nz/').catch(() => []);
 
     for (const barcode of searchableObject.barcodes) {
       const barcodeResults = await this.performSearch(
@@ -28,10 +28,13 @@ export class RealGroovyService {
     return Array.from(result.values());
   }
 
-  async performSearch(searchTerm: string, searchableObject: SearchableObject) {
+  private async performSearch(
+    searchTerm: string,
+    searchableObject: SearchableObject,
+  ) {
     //SELECT SEARCH BOX
     const searchBox = (await this.page.waitForSelector(
-      '#search-input-hero',
+      '#searchTerm_quicksearch',
     )) as unknown as HTMLInputElement;
     //CLEAR SEARCH BOX
     await searchBox.click();
@@ -46,49 +49,54 @@ export class RealGroovyService {
       this.page.keyboard.press('Enter'),
     ]);
 
-    const hits = await this.page.$$('.ais-hits--item');
-    const uniqueHits: RealGroovyHit[] = [];
+    const hits = await this.page.$$('.resultslist tbody tr');
+    const uniqueHits: MarbecksHit[] = [];
     for (const hit of hits) {
       //TITLE
-      const text = await hit
-        .$eval('.text', (element) => element.textContent)
+      const title = await hit
+        .$eval('.albumtitle', (element) => element.textContent)
         .catch(() => '');
-      //CAPTION
-      const caption = await hit
-        .$eval('.caption', (element) => element.textContent)
-        .catch(() => '');
-      //LINK
+      // LINK
       const link = await hit
         .$eval(
-          '.display-card',
-          (element) => element.attributes.getNamedItem('href').value,
+          '.details',
+          (element) =>
+            element.firstElementChild.attributes.getNamedItem('href').value,
         )
         .catch(() => '');
       //ARTIST NAME
       const artistName = await hit
-        .$eval('.subtitle', (element) => element.textContent)
+        .$eval('.artistname', (element) => element.textContent)
         .catch(() => '');
       //PRICE
       const price = await hit
-        .$eval('.title', (element) => element.textContent)
+        .$eval('.price', (element) => element.textContent)
         .catch(() => '');
-      //IMAGE
+      //IMAGE SOURCE
       const imageSrc = await hit
         .$eval(
-          '.img',
+          '.coverimage',
           (element) => element.attributes.getNamedItem('src').value,
         )
         .catch(() => '');
+      //DESCRIPTION
+      const description = await hit
+        .$eval('.description', (element) => element.textContent)
+        .catch(() => '');
+      for (const searchTitle of searchableObject.titles) {
+        console.log('title: ' + title);
+        console.log(searchTitle);
+        console.log(title.toLowerCase().includes(searchTitle));
+        console.log(description.includes('LP'));
 
-      for (const title of searchableObject.titles) {
         if (
-          text.toLowerCase().includes(title.toLowerCase()) &&
-          caption.includes('LP')
+          title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+          description.includes('LP')
         ) {
           const unique = {
-            link: 'https://realgroovy.co.nz' + link,
-            title: text,
+            title: title,
             artistName: artistName,
+            link: 'https://marbecks.co.nz/' + link,
             price: Number(price.replace(/[^0-9\.]+/g, '')),
             imageSrc: imageSrc,
           };

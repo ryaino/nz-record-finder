@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities; /* You can add global styles to this file, and also import other style files */
+
+
+.card {
+  display: grid;
+  width: 150px;
+  height: 100%;
+  justify-items: center;
+  border-width: 1px;
+  border: black;
+  border-style: solid;
+  padding: 10px;
+  text-align: center;
+  text-overflow: ellipsis;
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  transform-style: preserve-3d;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.card-text {
+  overflow: hidden;
+  transform: translateZ(20px);
+}
+
+
+img {
+  transform: translateZ(20px);
+}
+
+body {
+  background-color: #4158D0;
+  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+  min-height: 100vh;
+  font-family: 'Nunito', sans-serif;
+  padding-bottom: 50px;
+}
+

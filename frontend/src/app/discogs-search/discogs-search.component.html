@@ -1,0 +1,84 @@
+<h1>
+  NZ Record Finder
+</h1>
+<h2>
+  Search for a record across multiple New Zealand websites. Currently supported
+  sites include Real Groovy, Just For The Record and Marbecks.
+</h2>
+<h3>
+  <ol>
+    <li>
+      Start by inputting the name of the record you want to search for.
+    </li>
+    <li>
+      Then select the result that matches what you're looking for.
+    </li>
+    <li>
+      Wait a good while (like a minute or so) and then eventually you'll see
+      all the results found across the supported websites.
+    </li>
+  </ol>
+
+</h3>
+<div class="input-button">
+  <input class="" id="searchInput" type="text" [formControl]="searchInput">
+  <button class="" (click)="doSearch()">Submit</button>
+</div>
+
+<div *ngIf="showSearchResults && searchResults" class="search-results">
+
+  <app-discogs-master
+    *ngFor="let result of searchResults.results"
+    [result]="result"
+    (click)="scrape(result)"
+  ></app-discogs-master>
+
+</div>
+<div *ngIf="selectedResult && isLoading" class="search-results" style="flex-direction: column; align-items: center">
+  Searching for:
+  <app-discogs-master
+    [result]="selectedResult"
+  ></app-discogs-master>
+  Please wait...
+</div>
+
+<div *ngIf="showScrapedResults && selectedResult">
+  <div class="search-results" style="flex-direction: column;  align-items: center">
+    <h2>Showing Results For:</h2>
+    <app-discogs-master
+      [result]="selectedResult"
+    ></app-discogs-master>
+  </div>
+  <h3>Just For The Record</h3>
+  <div class="scrap-results">
+    <app-scrape-result *ngFor="let hit of scrapeResult.justForTheRecordHits"
+                       [imageSrc]="hit.imageSrc"
+                       [link]="hit.link"
+                       [price]="hit.price"
+                       [text]="hit.artistAndTitle"
+    >
+    </app-scrape-result>
+  </div>
+  <h3>Real Groovy </h3>
+  <div class="scrap-results">
+    <app-scrape-result *ngFor="let hit of scrapeResult.realGroovyHits"
+                       [imageSrc]="hit.imageSrc"
+                       [link]="hit.link"
+                       [price]="hit.price"
+                       [text]="hit.artistName + ' - ' + hit.title"
+    >
+    </app-scrape-result>
+  </div>
+  <h3>Marbecks</h3>
+  <div class="scrap-results">
+    <app-scrape-result *ngFor="let hit of scrapeResult.marbecksHits"
+                       [imageSrc]="hit.imageSrc"
+                       [link]="hit.link"
+                       [price]="hit.price"
+                       [text]="hit.artistName + ' - ' + hit.title"
+    >
+    </app-scrape-result>
+  </div>
+</div>
+
+
