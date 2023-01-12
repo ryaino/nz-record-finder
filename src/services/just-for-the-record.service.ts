@@ -67,14 +67,19 @@ export class JustForTheRecordService {
         .catch(() => '');
 
       for (const title of searchableObject.titles) {
-        if (name.toLowerCase().includes(title.toLowerCase())) {
-          const unique = {
-            link: 'https://www.justfortherecord.co.nz' + link,
-            artistAndTitle: name,
-            price: Number(price.replace(/[^0-9\.]+/g, '')),
-            imageSrc: 'https://www.justfortherecord.co.nz' + imageSrc,
-          };
-          uniqueHits.push(unique);
+        for (const artist of searchableObject.artistNames) {
+          if (
+            name.toLowerCase().includes(title.toLowerCase()) &&
+            name.toLowerCase().includes(artist.toLowerCase())
+          ) {
+            const unique = {
+              link: 'https://www.justfortherecord.co.nz' + link,
+              artistAndTitle: name,
+              price: Number(price.replace(/[^0-9\.]+/g, '')),
+              imageSrc: 'https://www.justfortherecord.co.nz' + imageSrc,
+            };
+            uniqueHits.push(unique);
+          }
         }
       }
     }
