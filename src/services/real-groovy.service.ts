@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { SearchableObject } from '../models/searchable-object.model';
-import { InjectBrowser } from 'nest-puppeteer';
 import { Browser, Page } from 'puppeteer';
 import { RealGroovyHit } from '../models/real-groovy-hit.model';
+import { InjectBrowser } from '../../nest-puppeteer/src';
 
 @Injectable()
 export class RealGroovyService {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectBrowser } from 'nest-puppeteer';
+import { InjectBrowser } from '../../nest-puppeteer/src';
 import { Browser, Page } from 'puppeteer';
 import { SearchableObject } from '../models/searchable-object.model';
 import { JustForTheRecordHit } from '../models/just-for-the-record-hit.model';

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PuppeteerModule } from 'nest-puppeteer';
+import { PuppeteerModule } from '../nest-puppeteer/src';
 import { PuppeteerService } from './services/puppeteer.service';
 import { DiscogsService } from './services/discogs.service';
 import { DiscogsController } from './controllers/discogs.controller';
@@ -12,7 +12,14 @@ import { MarbecksService } from './services/marbecks.service';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PuppeteerModule.forRoot(), HttpModule, ConfigModule.forRoot()],
+  imports: [
+    PuppeteerModule.forRoot({
+      executablePath: '/usr/bin/google-chrome',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    }),
+    HttpModule,
+    ConfigModule.forRoot(),
+  ],
   controllers: [AppController, DiscogsController],
   providers: [
     AppService,

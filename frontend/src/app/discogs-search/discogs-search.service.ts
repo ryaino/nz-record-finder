@@ -14,7 +14,7 @@ export class DiscogsSearchService {
       params: new HttpParams().set('searchTerm', searchTerm),
     };
     return this.http.post<DiscogsSearchResults>(
-      'https://23bd-163-47-236-43.au.ngrok.io/discogs/search',
+      'https://a214-163-47-236-43.au.ngrok.io/discogs/search',
       {},
       {
         params: {

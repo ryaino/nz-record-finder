@@ -27,8 +27,9 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "axios": "^1.2.2",
-    "nest-puppeteer": "^1.1.1",
+    "nest-puppeteer": "file:../app/nest-puppeteer",
     "puppeteer": "^19.4.1",
+    "puppeteer-extra": "^3.3.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectBrowser } from 'nest-puppeteer';
+import { InjectBrowser } from '../../nest-puppeteer/src';
 import { Browser } from 'puppeteer';
 
 @Injectable()

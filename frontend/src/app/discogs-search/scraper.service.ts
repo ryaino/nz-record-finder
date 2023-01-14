@@ -19,7 +19,7 @@ export class ScraperService {
 
   doScrape(masterId: number): Observable<ScrapeResult> {
     return this.http.post<ScrapeResult>(
-      'https://23bd-163-47-236-43.au.ngrok.io/scrape',
+      'https://a214-163-47-236-43.au.ngrok.io/scrape',
       {},
       {
         params: {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Browser, Page } from 'puppeteer';
-import { InjectBrowser } from 'nest-puppeteer';
+import { InjectBrowser } from '../../nest-puppeteer/src';
 import { SearchableObject } from '../models/searchable-object.model';
 import { MarbecksHit } from '../models/marbecks-hit.model';
 
